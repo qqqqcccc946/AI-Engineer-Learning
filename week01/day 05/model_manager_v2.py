@@ -59,7 +59,7 @@ while True:
         found = False
         
         for model in models:
-            if keyword == model["name"].lower():
+            if keyword in model["name"].lower():
             
                 found = True
                 change=float(input("请输入需要修改的评分："))
