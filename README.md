@@ -30,9 +30,6 @@ Topics:
 - [X] Complete Python fundamentals exercises (Days 1–5)
 - [X] Create and push the GitHub learning repository
 - [X] Open the first Pull Request
-- [ ] Complete Python Model Manager V3
-- [ ] Learn pytest and automated testing
-- [ ] Build the first LLM application
 
 ## Main Learning Resource
 
