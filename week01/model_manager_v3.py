@@ -32,12 +32,12 @@ def load_models():
 def input_score():
     while True:
         try:
-            score = int(input("请输入模型评分："))
+            score = float(input("请输入模型评分："))
 
-            if score < 0 or score > 100:
+            if not 0 <= score <= 100:
                 raise ValueError("评分必须在0到100之间")
 
-            return score
+            return int(score) if score.is_integer() else score
 
         except ValueError as error:
             print(f"输入错误，请重新输入")                
