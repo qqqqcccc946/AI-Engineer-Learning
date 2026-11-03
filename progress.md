@@ -175,8 +175,6 @@
 - **已验收（GitHub 状态核验）：** PR #1、PR #2 均为 `merged`；`master` 中 `progress.md` 当前为 404 未找到。
 - **已完成待验收：** 生成本份跨聊天进度整合稿；尚未确认复制到本地仓库与提交远程。
 
-
-
 ### 2026-11-03 — Python 独立考核 01
 
 任务：平均分计算器、return 与空列表处理
@@ -209,7 +207,6 @@ pytest week02/pytest_practice/average_assessment.py
 下一步：
 交回每日任务派发聊天框统一安排。
 
-
 ### 2026-11-03 — Python / Codex / GitHub
 
 - Python 平均分独立考核：已验收
@@ -222,7 +219,9 @@ pytest week02/pytest_practice/average_assessment.py
 - 本地 master 同步：待核验
 - JSON 损坏后的加载处理：待继续完善
 
-## 10. 每次更新时填写的模板
+
+
+## 10. **每次更新时填写的模板**
 
 ```text
 ### YYYY-MM-DD — 模块 / 任务
