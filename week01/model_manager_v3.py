@@ -1,4 +1,7 @@
 import json
+import os
+import tempfile
+from pathlib import Path
 models = [
     {"name": "GPT", "score": 95},
     {"name": "Claude", "score": 88},
@@ -9,15 +12,29 @@ models = [
 
 def show_models(models):
     for model in models:
-        print(f"{model["name"]}: {model["score"]}分")
+        print(f"{model['name']}: {model['score']}分")
 
 
 def add_model(models,name,score):
 
     models.append({"name": name,"score": score})
 def save_models(models):
-    with open("models.json", "w", encoding="utf-8") as file:
-        json.dump(models, file, ensure_ascii=False, indent=4)
+    target = Path("models.json").resolve()
+    temporary_path = None
+    try:
+        # 同目录确保替换发生在同一文件系统；关闭文件后再替换以兼容 Windows。
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=target.parent,
+            prefix=".models-", suffix=".tmp", delete=False,
+        ) as file:
+            temporary_path = Path(file.name)
+            json.dump(models, file, ensure_ascii=False, indent=4)
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(temporary_path, target)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
     print("数据保存成功")
 def load_models():
  try:
@@ -57,7 +74,7 @@ def input_score():
 #show_models(models)
 #任务c测试
 # 任务 C 测试
-models = load_models()
-
-print("加载结果：", models)
-print("数据类型：", type(models))
+if __name__ == "__main__":
+    models = load_models()
+    print("加载结果：", models)
+    print("数据类型：", type(models))
