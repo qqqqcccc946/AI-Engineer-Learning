@@ -1,6 +1,9 @@
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -86,3 +89,53 @@ def test_replace_uses_complete_file_in_same_directory(manager, tmp_path, monkeyp
 
     assert len(calls) == 1
     assert json.loads(target.read_text(encoding="utf-8")) == models
+
+
+def test_load_models_corrupt_json(manager, tmp_path):
+    target = tmp_path / "models.json"
+    original = b'[{"name": "GPT", "score": 95},\r\n'
+    target.write_bytes(original)
+
+    with pytest.raises(json.JSONDecodeError, match="models.json JSON 文件格式错误") as exc:
+        manager.load_models()
+
+    assert exc.value.lineno == 2
+    assert exc.value.colno == 1
+    assert target.read_bytes() == original
+    assert set(tmp_path.iterdir()) == {target}
+
+
+def test_load_models_missing_file(manager, tmp_path):
+    assert manager.load_models() == []
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_load_models_success(manager, tmp_path):
+    target = tmp_path / "models.json"
+    models = [{"name": "中文模型", "score": 95}]
+    original = json.dumps(models, ensure_ascii=False).encode("utf-8")
+    target.write_bytes(original)
+
+    assert manager.load_models() == models
+    assert target.read_bytes() == original
+    assert set(tmp_path.iterdir()) == {target}
+
+
+def test_startup_corrupt_json_preserves_original(manager, tmp_path):
+    target = tmp_path / "models.json"
+    original = b'[{"name": "GPT", "score": 95},\r\n'
+    target.write_bytes(original)
+
+    result = subprocess.run(
+        [sys.executable, manager.__file__], cwd=tmp_path,
+        capture_output=True, text=True, encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+    )
+
+    assert result.returncode != 0
+    assert "加载失败" in result.stderr
+    assert "models.json JSON 文件格式错误" in result.stderr
+    assert "加载结果" not in result.stdout
+    assert "数据保存成功" not in result.stdout
+    assert target.read_bytes() == original
+    assert set(tmp_path.iterdir()) == {target}

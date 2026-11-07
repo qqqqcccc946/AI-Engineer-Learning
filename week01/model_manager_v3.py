@@ -37,15 +37,16 @@ def save_models(models):
             temporary_path.unlink(missing_ok=True)
     print("数据保存成功")
 def load_models():
- try:
+    try:
         with open("models.json", "r", encoding="utf-8") as file:
             return json.load(file)
- except FileNotFoundError:
+    except FileNotFoundError:
         print("文件不存在")
         return []
- except json.JSONDecodeError:
-        print("JSON 文件格式错误")
-        return []
+    except json.JSONDecodeError as error:
+        raise json.JSONDecodeError(
+            f"models.json JSON 文件格式错误：{error.msg}", error.doc, error.pos
+        ) from error
 def input_score():
     while True:
         try:
@@ -75,6 +76,9 @@ def input_score():
 #任务c测试
 # 任务 C 测试
 if __name__ == "__main__":
-    models = load_models()
+    try:
+        models = load_models()
+    except json.JSONDecodeError as error:
+        raise SystemExit(f"加载失败，程序已停止：{error}") from error
     print("加载结果：", models)
     print("数据类型：", type(models))
