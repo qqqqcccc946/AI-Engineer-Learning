@@ -175,8 +175,6 @@
 - **已验收（GitHub 状态核验）：** PR #1、PR #2 均为 `merged`；`master` 中 `progress.md` 当前为 404 未找到。
 - **已完成待验收：** 生成本份跨聊天进度整合稿；尚未确认复制到本地仓库与提交远程。
 
-
-
 ### 2026-11-03 — Python 工程化 / JSON 安全保存 / GitHub 协作
 
 **状态：已验收（本次核心任务范围）**
@@ -271,6 +269,56 @@ JSON 安全保存首次测试：
 
 **当日最终结论：**
 2026-11-03 的 Python 独立考核、JSON 安全保存开发、Codex 协作及 GitHub PR #3 工程交付已完成验收。Git 仓库整理及进度文件推送转入下一学习日。已验收的基础内容不再重复安排。
+
+
+### 2026-11-07 — Python / JSON 安全加载最终验收
+
+状态：已验收（当前功能与测试范围）
+执行聊天框：Python 学习区、GitHub / Codex 实战区
+
+文件路径：
+
+- week01/model_manager_v3.py
+- week02/pytest_practice/test_json_safety.py
+
+实际完成内容：
+
+- 修复损坏 JSON 被错误识别为空列表的问题
+- 损坏 JSON 时抛出 JSONDecodeError
+- 启动加载失败时通过 SystemExit 停止程序
+- 保证损坏文件内容不被修改
+- 增加正常加载、文件缺失、损坏加载及启动保护测试
+- 修改后的代码已提交至 GitHub master
+
+测试命令：
+py -m pytest week02/pytest_practice/test_json_safety.py week02/pytest_practice/test_calculator.py -q
+
+真实测试输出：
+15 passed in 0.49s（Python 课堂验收记录）
+本次未重新运行，暂无 CI 通过证据。
+
+Git Commit：
+f262c0e
+
+Pull Request：
+本次修改为直接提交，未确认新 PR。
+
+本次验证范围：
+
+- 正常加载
+- 缺失文件处理
+- 损坏 JSON 抛出异常
+- 启动失败保护
+- 原有安全保存测试不回归
+
+遗留问题：
+
+- 本地 Git 工作区状态待最终确认
+- progress.md 需更新为最新验收状态
+- Python 模块化和 AI 理论独立考核尚未完成
+
+下一步（交总控决定）：
+开始 Python 模块化、异常处理深化及工程测试设计。
 
 ## 10. **每次更新时填写的模板**
 
